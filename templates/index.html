@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Placement Predictor</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+        .container {
+            margin-top: 60px;
+            max-width: 600px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card p-4">
+        <h2 class="text-center mb-4">Placement Prediction System</h2>
+        
+        <form method="POST" action="/predict">
+            <div class="mb-3">
+                <label class="form-label">Company Name</label>
+                <input type="text" name="company" class="form-control" placeholder="e.g. Amazon" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Year</label>
+                <input type="number" name="year" class="form-control" placeholder="e.g. 2025" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Predict</button>
+        </form>
+
+        {% if error %}
+        <div class="alert alert-danger mt-4" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if prediction is not none %}
+        <div class="alert alert-info mt-4">
+            <h5>Prediction Result:</h5>
+            <p><strong>Company:</strong> {{ company }}</p>
+            <p><strong>Year:</strong> {{ year }}</p>
+            <p><strong>Will Visit:</strong> <span class="badge bg-{{ 'success' if prediction == 1 else 'danger' }}">{{ 'Yes' if prediction == 1 else 'No' }}</span></p>
+            {% if prediction == 1 %}
+            <p><strong>Expected CTC (LPA)(on avg):</strong> ₹{{ ctc | round(2) }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
